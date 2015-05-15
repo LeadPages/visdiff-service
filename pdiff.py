@@ -31,7 +31,10 @@ def gen_p_diff():
 
     PDIFF = "visdiff.png"
 
-    diff_image = Image.new('RGBA', (output_width, output_height))
+    if IMAGE1.mode == "RGB":
+        diff_image = Image.new('RGB', (output_width, output_height))
+    else:
+        diff_image = Image.new('RGBA', (output_width, output_height))
 
     image1_pixels = IMAGE1.load()
     image2_pixels = IMAGE2.load()
