@@ -36,7 +36,6 @@ def gen_p_diff():
     #diff_percent = 0.0
     for i in range(output_width-1):
         for j in range(output_height-1):
-            print "dbg: " + str(image1_pixels[i,j])
             if is_masked(image1_pixels[i,j]):
                 diff_pixels[i,j] = image2_pixels[i,j]
             #if pixels_are_different(image1_pixels[i, j], image2_pixels[i, j]):

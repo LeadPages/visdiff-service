@@ -31,7 +31,7 @@ def gen_p_diff():
 
     PDIFF = "visdiff.png"
 
-    diff_image = Image.new('RGB', (output_width, output_height))
+    diff_image = Image.new('RGBA', (output_width, output_height))
 
     image1_pixels = IMAGE1.load()
     image2_pixels = IMAGE2.load()
@@ -43,14 +43,15 @@ def gen_p_diff():
     diff_percent = 0.0
     for i in range(output_width-1):
         for j in range(output_height-1):
-            if pixels_are_different(image1_pixels[i, j], image2_pixels[i, j]):
-                # write a yellow pixel to the difference mask and
-                # increment difference count
-                diff_pixels[i, j] = (128, 128, 0)
-                diff_count += 1
-            else:
-                # write a black pixel to the diffrence mask
-                diff_pixels[i, j] = (0, 0, 0)
+            if not is_masked(image1_pixels[i,j]):
+                if pixels_are_different(image1_pixels[i, j], image2_pixels[i, j]):
+                    # write a yellow pixel to the difference mask and
+                    # increment difference count
+                    diff_pixels[i, j] = (128, 128, 0)
+                    diff_count += 1
+                else:
+                    # write a black pixel to the diffrence mask
+                    diff_pixels[i, j] = (0, 0, 0)
 
     # do not blend if images are found to match because blending
     # can be expensive
@@ -70,6 +71,13 @@ def gen_p_diff():
         % (diff_count, diff_percent)
 
     subprocess.call(["open", "visdiff.png"])
+
+
+def is_masked(pixel):
+    if pixel[0] in range(245, 260) and pixel[1] in range(0, 4) and pixel[2] in range(250, 260):
+        return True
+    else:
+        return False
 
 
 def pixels_are_different(pixel1, pixel2):
