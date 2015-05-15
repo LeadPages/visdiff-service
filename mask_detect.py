@@ -5,6 +5,7 @@ import subprocess
 
 DIFF_THRESHOLD = 0
 IMAGE1 = None
+IMAGE2 = None
 
 
 def gen_p_diff():
@@ -13,6 +14,7 @@ def gen_p_diff():
     output to console results and generate a visual diff for humans
     """
     global IMAGE1
+    global IMAGE2
 
     IMAGE1_WIDTH, IMAGE1_HEIGHT = IMAGE1.size
 
@@ -25,6 +27,7 @@ def gen_p_diff():
     diff_image = Image.new('RGB', (output_width, output_height))
 
     image1_pixels = IMAGE1.load()
+    image2_pixels = IMAGE2.load()
     diff_pixels = diff_image.load()
 
     # iterate through the pixels of both images and compare, if different,
@@ -35,14 +38,14 @@ def gen_p_diff():
         for j in range(output_height-1):
             print "dbg: " + str(image1_pixels[i,j])
             if is_masked(image1_pixels[i,j]):
-                diff_pixels = image1_pixels[i,j]
+                diff_pixels[i,j] = image2_pixels[i,j]
             #if pixels_are_different(image1_pixels[i, j], image2_pixels[i, j]):
                 # write a yellow pixel to the difference mask and
                 # increment difference count
                 #diff_pixels[i, j] = (128, 128, 0)
                 #diff_count += 1
             else:
-                diff_pixels = (0,0,0)
+                diff_pixels[i,j] = (0,0,0)
                 # write a black pixel to the diffrence mask
                 #diff_pixels[i, j] = (0, 0, 0)
 
@@ -70,8 +73,7 @@ def gen_p_diff():
 
 def is_masked(pixel):
     #if pixel[0] == 250 and pixel[1] == 1 and pixel[3] == 253:
-    if pixel[0] in range(240, 255) and pixel[1] in range(0, 4) and pixel[2] in range(250, 255):
-        print "FOUND MASK!"
+    if pixel[0] in range(245, 260) and pixel[1] in range(0, 4) and pixel[2] in range(250, 260):
         return True
     else:
         return False
@@ -94,11 +96,12 @@ def pixels_are_different(pixel1, pixel2):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
+    if len(sys.argv) != 3:
         print "Please specify both ImageA and ImageB and a difference " \
                 " threshold (suggested: 40)\n >python pdiff.py <ImageA> <ImageB> <threshold>\n"
         sys.exit("Wrong number of arguments")
 
     IMAGE1 = Image.open(sys.argv[1])
+    IMAGE2 = Image.open(sys.argv[2])
 
     gen_p_diff()
