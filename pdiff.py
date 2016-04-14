@@ -1,20 +1,20 @@
 from PIL import Image
 import sys
 import math
-import subprocess
-
-DIFF_THRESHOLD = 0
-IMAGE1 = None
-IMAGE2 = None
 
 
-def gen_p_diff():
+def gen_p_diff(img1, img2):
     """
     Compare the two images passed in to the module from command line
     output to console results and generate a visual diff for humans
     """
-    global IMAGE1
-    global IMAGE2
+    output_name = img1[:-4] + "_diff.png"
+
+    IMAGE1 = Image.open(img1)
+    IMAGE2 = Image.open(img2)
+
+    print IMAGE1.size
+    print IMAGE2.size
 
     IMAGE1_WIDTH, IMAGE1_HEIGHT = IMAGE1.size
     IMAGE2_WIDTH, IMAGE2_HEIGHT = IMAGE2.size
@@ -28,8 +28,6 @@ def gen_p_diff():
         output_height = IMAGE1_HEIGHT
     else:
         output_height = IMAGE2_HEIGHT
-
-    PDIFF = "visdiff.png"
 
     if IMAGE1.mode == "RGB":
         diff_image = Image.new('RGB', (output_width, output_height))
@@ -63,17 +61,17 @@ def gen_p_diff():
         # difference image to generate the output image that a human can see
         final_image = Image.blend(IMAGE1, IMAGE2, 0.5)
         final_image = Image.blend(diff_image, final_image, 0.25)
-        final_image.save(PDIFF)
+        final_image.save(output_name)
 
         diff_percent = (float(diff_count)/(output_width * output_height))*100
+    else:
+        final_image = Image.blend(IMAGE1, diff_image, 0.25)
+        final_image.save(output_name)
 
     # it is up to whatever consumes this output to determine whether the
     # calculated diff percentage or count of different
     # pixels is acceptible or not
-    print "Detected %d different pixels, %f percent difference\n" \
-        % (diff_count, diff_percent)
-
-    subprocess.call(["open", "visdiff.png"])
+    return (diff_count, diff_percent)
 
 
 def is_masked(pixel):
@@ -91,7 +89,8 @@ def pixels_are_different(pixel1, pixel2):
     pixel1 - tuple(R, G, B) where R/G/B are 0 - 255
     pixel2 - tuple(R, G, B) where R/G/B are 0 - 255
     """
-    global DIFF_THRESHOLD
+    # global DIFF_THRESHOLD
+    DIFF_THRESHOLD = 40
     for component in range(3):
         if math.fabs(pixel1[component] - pixel2[component]) > DIFF_THRESHOLD:
             return True
@@ -105,8 +104,7 @@ if __name__ == '__main__':
                 " threshold (suggested: 40)\n >python pdiff.py <ImageA> <ImageB> <threshold>\n"
         sys.exit("Wrong number of arguments")
 
-    IMAGE1 = Image.open(sys.argv[1])
-    IMAGE2 = Image.open(sys.argv[2])
-    DIFF_THRESHOLD = int(sys.argv[3])
+    (diff_count, diff_percent) = gen_p_diff(sys.argv[1], sys.argv[2])
 
-    gen_p_diff()
+    print "Detected %d different pixels, %f percent difference\n" \
+        % (diff_count, diff_percent)
