@@ -44,8 +44,9 @@ def gen_p_diff(img1, img2):
     diff_percent = 0.0
     for i in range(output_width-1):
         for j in range(output_height-1):
-            if not is_masked(image1_pixels[i,j]):
-                if pixels_are_different(image1_pixels[i, j], image2_pixels[i, j]):
+            if not is_masked(image1_pixels[i, j]):
+                if pixels_are_different(image1_pixels[i, j],
+                                        image2_pixels[i, j]):
                     # write a yellow pixel to the difference mask and
                     # increment difference count
                     diff_pixels[i, j] = (128, 128, 0)
@@ -75,7 +76,8 @@ def gen_p_diff(img1, img2):
 
 
 def is_masked(pixel):
-    if pixel[0] in range(245, 260) and pixel[1] in range(0, 4) and pixel[2] in range(250, 260):
+    if pixel[0] in range(245, 260) and pixel[1] in range(0, 4)\
+            and pixel[2] in range(250, 260):
         return True
     else:
         return False
@@ -101,7 +103,7 @@ def pixels_are_different(pixel1, pixel2):
 if __name__ == '__main__':
     if len(sys.argv) != 4:
         print "Please specify both ImageA and ImageB and a difference " \
-                " threshold (suggested: 40)\n >python pdiff.py <ImageA> <ImageB> <threshold>\n"
+            " threshold (suggested: 40)\n >python pdiff.py <ImageA> <ImageB> <threshold>\n"
         sys.exit("Wrong number of arguments")
 
     (diff_count, diff_percent) = gen_p_diff(sys.argv[1], sys.argv[2])
