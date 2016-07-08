@@ -32,7 +32,7 @@ class ProductionConfig(Config):
     """
     configuration settings for production
     """
-    print('no')
+    pass
 
 config = {
     'development': DevelopmentConfig,
