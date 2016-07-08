@@ -2,6 +2,8 @@ from PIL import Image
 import io
 import os
 import math
+import base64
+import cStringIO
 
 
 def generate_difference_report(image_one, image_two,
@@ -15,8 +17,6 @@ def generate_difference_report(image_one, image_two,
     else:
         response['images'].append({'location': 'fromString'})
         response['images'].append({'location': 'fromString'})
-
-    # response['outputName'] = image_one[:-4] + "_diff.png"
 
     IMAGE_ONE = load_image(image_one)
     IMAGE_TWO = load_image(image_two)
@@ -68,10 +68,14 @@ def generate_difference_report(image_one, image_two,
             # see
             final_image = Image.blend(IMAGE_ONE, IMAGE_TWO, 0.5)
             final_image = Image.blend(diff_image, final_image, 0.25)
-            final_image.save(response['outputName'])
+            buffer = cStringIO.StringIO()
+            final_image.save(buffer, format="PNG")
+            response['outputImage'] = base64.b64encode(buffer.getvalue())
         else:
             final_image = Image.blend(IMAGE_ONE, diff_image, 0.25)
-            final_image.save(response['outputName'])
+            buffer = cStringIO.StringIO()
+            final_image.save(buffer, format="PNG")
+            response['outputImage'] = base64.b64encode(buffer.getvalue())
 
     # it is up to whatever consumes this output to determine whether the
     # calculated diff percentage or count of different
