@@ -12,6 +12,6 @@ def create_app(config_name):
 
     # attach routes and custom error pages here
     from .main import main as main_blueprint
-    app.register_blueprint(main_blueprint)
+    app.register_blueprint(main_blueprint, url_prefix='/api/v1')
 
     return app
