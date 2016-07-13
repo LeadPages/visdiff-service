@@ -15,8 +15,8 @@ def generate_difference_report(image_one, image_two,
         response['images'].append({'location': image_one})
         response['images'].append({'location': image_two})
     else:
-        response['images'].append({'location': 'fromString'})
-        response['images'].append({'location': 'fromString'})
+        response['images'].append({'location': 'base64string'})
+        response['images'].append({'location': 'base64string'})
 
     IMAGE_ONE = load_image(image_one)
     IMAGE_TWO = load_image(image_two)

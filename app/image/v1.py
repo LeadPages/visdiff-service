@@ -22,18 +22,23 @@ def image_diff_test_page():
         image_one_name = secure_filename(form.image_one.data.filename)
         image_two_name = secure_filename(form.image_two.data.filename)
 
-        image_one_type = secure_filename(form.image_one.data.type)
-        image_two_type = secure_filename(form.image_one.data.type)
+        # image_one_type = secure_filename(form.image_one.data.type)
+        # image_two_type = secure_filename(form.image_one.data.type)
 
         image_one = base64.b64encode(form.image_one.data.stream.read())
         image_two = base64.b64encode(form.image_two.data.stream.read())
         diff_report = image_diff.generate_difference_report(image_one,
                                                             image_two,
                                                             True)
+        images = [
+            dict(name=image_one_name, image=image_one),
+            dict(name=image_two_name, image=image_two),
+            dict(name='Comparison', image=diff_report['outputImage'])
+        ]
+        diff_report['outputImage'] = {}
         return render_template("comparison.html",
-                               image_one=image_one,
-                               image_two=image_two,
-                               image_blend=diff_report["outputImage"]), 200
+                               report=diff_report,
+                               images=images), 200
     return render_template("diff_comparision.html", form=form), 200
 
 

@@ -1,13 +1,36 @@
-{% extends "base.html" %}
-
-{% block title %}{{ super() }} - index{% endblock %}
-
-{% block page_container %}
+{% extends "base.html" %} {% block title %}{{ super() }} - index{% endblock %} {% block page_container %}
 
 <div class="page-header">
-  <img src="data:;base64,{{ image_one }}">
-  <img src="data:;base64,{{ image_two }}">
-  <img src="data:;base64,{{ image_blend }}">
+    <h3>Yay difference</h3>
 </div>
+<div class="row show-grid">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Report</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <tr>
+                        <td>Pixel Difference Count</td>
+                        <td>{{ report['diffCount'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Percent Difference</td>
+                        <td>{{ report['diffPercent'] }}%</td>
+                    </tr>
+                    {% for image in report['images'] %} {% set outloop = loop %} {% for key, value in image.iteritems() %}
+                    <tr>
+                        <td>Image {{outloop.index}} {{ key|e }}</td>
+                        <td>{{ value|e }}</td>
+                    </tr>
+                    {% endfor %} {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+    {% include '_image.html' %}
+</div>
+
 
 {% endblock %}
