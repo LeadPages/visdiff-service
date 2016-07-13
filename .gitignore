@@ -3,3 +3,4 @@ temp/
 *.pyc
 .DS_Store
 diff.png
+scratch.py
