@@ -1,17 +1,13 @@
 {% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %}{{ super() }} - index{% endblock %}
 
 {% block page_container %}
 
 <div class="page-header">
-  <h1>This is the index for diff</h1>
+  <img src="data:;base64,{{ image_one }}">
+  <img src="data:;base64,{{ image_two }}">
+  <img src="data:;base64,{{ image_blend }}">
 </div>
-<div>
-  {{ wtf.quick_form(form) }}
-</div>
-
-
 
 {% endblock %}
