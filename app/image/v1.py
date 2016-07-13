@@ -3,7 +3,7 @@ from . import image
 from .. import image_diff
 
 
-@image.route("/v1/diff/", methods=['GET', 'POST'])
+@image.route("/api/v1/diff/", methods=['POST'])
 def image_diff_endpoint_v1():
     images = request.form.getlist('images')
     if len(images) != 2:

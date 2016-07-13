@@ -12,6 +12,6 @@ def create_app(config_name):
 
     # attach routes and custom error pages here
     from .image import image as image_blueprint
-    app.register_blueprint(image_blueprint, url_prefix='/api/image')
+    app.register_blueprint(image_blueprint, url_prefix='/image')
 
     return app
