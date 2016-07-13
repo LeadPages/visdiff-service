@@ -49,8 +49,8 @@ class GenerateDifferenceReportWithBase64StringTests(unittest.TestCase):
                 self.launchpage_before_1024_base64)
 
     def test_location_added(self):
-        self.assertEqual(self.res['images'][0]['location'], 'fromString')
-        self.assertEqual(self.res['images'][1]['location'], 'fromString')
+        self.assertEqual(self.res['images'][0]['location'], 'base64string')
+        self.assertEqual(self.res['images'][1]['location'], 'base64string')
 
     def test_size_added(self):
         self.assertEqual(self.res['images'][0]['size'], (715, 1024))

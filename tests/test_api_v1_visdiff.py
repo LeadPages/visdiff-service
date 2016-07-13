@@ -30,9 +30,10 @@ class ApiTests(unittest.TestCase):
             image_two = base64.b64encode(f.read())
 
         start = time.time()
-        r = self.client.post(url_for('main.image_diff_endpoint'), data=dict(
-            images=[image_two, image_one]
-        ))
+        r = self.client.post(url_for('image.image_diff_endpoint_v1'),
+                             data=dict(
+                                    images=[image_one, image_two]
+                                    ))
         end = time.time()
         elapsedTime = end - start
         self.assertLess(elapsedTime, API_REQUEST_TIMEOUT,
@@ -42,8 +43,8 @@ class ApiTests(unittest.TestCase):
 
         data = json.loads(r.data)
 
-        self.assertEqual(data['images'][0]['location'], 'fromString')
-        self.assertEqual(data['images'][1]['location'], 'fromString')
+        self.assertEqual(data['images'][0]['location'], 'base64string')
+        self.assertEqual(data['images'][1]['location'], 'base64string')
 
         # Size will come back as array instead of tuple due to json transform
         self.assertEqual(data['images'][0]['size'], [715, 1024])
@@ -67,9 +68,10 @@ class ApiTests(unittest.TestCase):
             image_two = base64.b64encode(f.read())
 
         start = time.time()
-        r = self.client.post(url_for('main.image_diff_endpoint'), data=dict(
-            images=[image_one, image_two]
-        ))
+        r = self.client.post(url_for('image.image_diff_endpoint_v1'),
+                             data=dict(
+                                    images=[image_one, image_two]
+                                    ))
         end = time.time()
         elapsedTime = end - start
         self.assertLess(elapsedTime, API_REQUEST_TIMEOUT,
@@ -79,8 +81,8 @@ class ApiTests(unittest.TestCase):
 
         data = json.loads(r.data)
 
-        self.assertEqual(data['images'][0]['location'], 'fromString')
-        self.assertEqual(data['images'][1]['location'], 'fromString')
+        self.assertEqual(data['images'][0]['location'], 'base64string')
+        self.assertEqual(data['images'][1]['location'], 'base64string')
 
         # Size will come back as array instead of tuple due to json transform
         self.assertEqual(data['images'][0]['size'], [1600, 1200])
@@ -103,9 +105,10 @@ class ApiTests(unittest.TestCase):
             image_two = base64.b64encode(f.read())
 
         start = time.time()
-        r = self.client.post(url_for('main.image_diff_endpoint'), data=dict(
-            images=[image_one, image_two]
-        ))
+        r = self.client.post(url_for('image.image_diff_endpoint_v1'),
+                             data=dict(
+                                    images=[image_one, image_two]
+                                    ))
         end = time.time()
         elapsedTime = end - start
         self.assertLess(elapsedTime, API_REQUEST_TIMEOUT,
@@ -115,8 +118,8 @@ class ApiTests(unittest.TestCase):
 
         data = json.loads(r.data)
 
-        self.assertEqual(data['images'][0]['location'], 'fromString')
-        self.assertEqual(data['images'][1]['location'], 'fromString')
+        self.assertEqual(data['images'][0]['location'], 'base64string')
+        self.assertEqual(data['images'][1]['location'], 'base64string')
 
         # Size will come back as array instead of tuple due to json transform
         self.assertEqual(data['images'][0]['size'], [347, 383])
@@ -139,9 +142,10 @@ class ApiTests(unittest.TestCase):
             image_two = base64.b64encode(f.read())
 
         start = time.time()
-        r = self.client.post(url_for('main.image_diff_endpoint'), data=dict(
-            images=[image_one, image_two]
-        ))
+        r = self.client.post(url_for('image.image_diff_endpoint_v1'),
+                             data=dict(
+                                    images=[image_one, image_two]
+                                    ))
         end = time.time()
         elapsedTime = end - start
         self.assertLess(elapsedTime, API_REQUEST_TIMEOUT,
@@ -151,8 +155,8 @@ class ApiTests(unittest.TestCase):
 
         data = json.loads(r.data)
 
-        self.assertEqual(data['images'][0]['location'], 'fromString')
-        self.assertEqual(data['images'][1]['location'], 'fromString')
+        self.assertEqual(data['images'][0]['location'], 'base64string')
+        self.assertEqual(data['images'][1]['location'], 'base64string')
 
         # Size will come back as array instead of tuple due to json transform
         self.assertEqual(data['images'][0]['size'], [245, 361])
@@ -175,9 +179,10 @@ class ApiTests(unittest.TestCase):
             image_two = base64.b64encode(f.read())
 
         start = time.time()
-        r = self.client.post(url_for('main.image_diff_endpoint'), data=dict(
-            images=[image_one, image_two]
-        ))
+        r = self.client.post(url_for('image.image_diff_endpoint_v1'),
+                             data=dict(
+                                    images=[image_one, image_two]
+                                    ))
         end = time.time()
         elapsedTime = end - start
         self.assertLess(elapsedTime, LARGE_API_REQUEST_TIMEOUT,
@@ -187,8 +192,8 @@ class ApiTests(unittest.TestCase):
 
         data = json.loads(r.data)
 
-        self.assertEqual(data['images'][0]['location'], 'fromString')
-        self.assertEqual(data['images'][1]['location'], 'fromString')
+        self.assertEqual(data['images'][0]['location'], 'base64string')
+        self.assertEqual(data['images'][1]['location'], 'base64string')
 
         # Size will come back as array instead of tuple due to json transform
         self.assertEqual(data['images'][0]['size'], [2868, 1436])
@@ -211,9 +216,10 @@ class ApiTests(unittest.TestCase):
             image_two = base64.b64encode(f.read())
 
         start = time.time()
-        r = self.client.post(url_for('main.image_diff_endpoint'), data=dict(
-            images=[image_one, image_two]
-        ))
+        r = self.client.post(url_for('image.image_diff_endpoint_v1'),
+                             data=dict(
+                                    images=[image_one, image_two]
+                                    ))
         end = time.time()
         elapsedTime = end - start
         self.assertLess(elapsedTime, LARGE_API_REQUEST_TIMEOUT,
@@ -223,8 +229,8 @@ class ApiTests(unittest.TestCase):
 
         data = json.loads(r.data)
 
-        self.assertEqual(data['images'][0]['location'], 'fromString')
-        self.assertEqual(data['images'][1]['location'], 'fromString')
+        self.assertEqual(data['images'][0]['location'], 'base64string')
+        self.assertEqual(data['images'][1]['location'], 'base64string')
 
         # Size will come back as array instead of tuple due to json transform
         self.assertEqual(data['images'][0]['size'], [2868, 2446])
@@ -247,9 +253,10 @@ class ApiTests(unittest.TestCase):
             image_two = base64.b64encode(f.read())
 
         start = time.time()
-        r = self.client.post(url_for('main.image_diff_endpoint'), data=dict(
-            images=[image_one, image_two]
-        ))
+        r = self.client.post(url_for('image.image_diff_endpoint_v1'),
+                             data=dict(
+                                    images=[image_one, image_two]
+                                    ))
         end = time.time()
         elapsedTime = end - start
         self.assertLess(elapsedTime, LARGE_API_REQUEST_TIMEOUT,
@@ -259,8 +266,8 @@ class ApiTests(unittest.TestCase):
 
         data = json.loads(r.data)
 
-        self.assertEqual(data['images'][0]['location'], 'fromString')
-        self.assertEqual(data['images'][1]['location'], 'fromString')
+        self.assertEqual(data['images'][0]['location'], 'base64string')
+        self.assertEqual(data['images'][1]['location'], 'base64string')
 
         # Size will come back as array instead of tuple due to json transform
         self.assertEqual(data['images'][0]['size'], [2868, 2826])
@@ -281,9 +288,10 @@ class ApiTests(unittest.TestCase):
             image_one = base64.b64encode(f.read())
 
         start = time.time()
-        r = self.client.post(url_for('main.image_diff_endpoint'), data=dict(
-            images=[image_one, image_one]
-        ))
+        r = self.client.post(url_for('image.image_diff_endpoint_v1'),
+                             data=dict(
+                                    images=[image_one, image_one]
+                                    ))
         end = time.time()
         elapsedTime = end - start
         self.assertLess(elapsedTime, API_REQUEST_TIMEOUT,
@@ -293,8 +301,8 @@ class ApiTests(unittest.TestCase):
 
         data = json.loads(r.data)
 
-        self.assertEqual(data['images'][0]['location'], 'fromString')
-        self.assertEqual(data['images'][1]['location'], 'fromString')
+        self.assertEqual(data['images'][0]['location'], 'base64string')
+        self.assertEqual(data['images'][1]['location'], 'base64string')
 
         # Size will come back as array instead of tuple due to json transform
         self.assertEqual(data['images'][0]['size'], [1600, 1200])
