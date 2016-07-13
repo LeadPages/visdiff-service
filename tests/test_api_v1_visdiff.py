@@ -38,7 +38,6 @@ class ApiTests(unittest.TestCase):
         self.assertLess(elapsedTime, API_REQUEST_TIMEOUT,
                         'request took %s, which is longer than %s seconds'
                         % (elapsedTime, API_REQUEST_TIMEOUT))
-
         self.assertEqual(r.status_code, 200)
 
         data = json.loads(r.data)
