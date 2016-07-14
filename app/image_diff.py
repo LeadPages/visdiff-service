@@ -64,23 +64,8 @@ def generate_difference_report(image_one, image_two,
                                        response['outputSize'][1]))*100
 
     if create_diff_file:
-        # do not blend if images are found to match because blending
-        # can be expensive
-        if diff_count != 0:
-            # overlay the two input images, then overlay the yellow/black
-            # marked
-            # difference image to generate the output image that a human can
-            # see
-            final_image = Image.blend(IMAGE_ONE, IMAGE_TWO, 0.5)
-            final_image = Image.blend(diff_image, final_image, 0.25)
-            buffer = cStringIO.StringIO()
-            final_image.save(buffer, format="PNG")
-            response['outputImage'] = base64.b64encode(buffer.getvalue())
-        else:
-            final_image = Image.blend(IMAGE_ONE, diff_image, 0.25)
-            buffer = cStringIO.StringIO()
-            final_image.save(buffer, format="PNG")
-            response['outputImage'] = base64.b64encode(buffer.getvalue())
+        response['outputImage'] = image_blender(IMAGE_ONE, IMAGE_TWO,
+                                                diff_image, diff_count)
 
     # it is up to whatever consumes this output to determine whether the
     # calculated diff percentage or count of different
@@ -113,11 +98,6 @@ def generate_difference_report_v2(image_one, image_two,
     response['images'][0]['mode'] = IMAGE_ONE.mode
     response['images'][1]['mode'] = IMAGE_TWO.mode
 
-    # iterate through the pixels of both images and compare, if different,
-    # mark the difference image with yellow so it is noticeable to humans
-    diff_count = 0
-    diff_percent = 0.0
-
     # Subtract array representations of both images (matching pixels are
     # returned as (0,0,0) or (0,0,0,0))
     diff_arr = np.subtract(np.asarray(IMAGE_ONE, dtype=np.uint8()),
@@ -132,37 +112,19 @@ def generate_difference_report_v2(image_one, image_two,
     else:
         match_arr = np.array(RGBA_BLACK)
     diff_mask = np.any(diff_arr != match_arr, axis=2)
-    diff_count = np.sum(diff_mask)
-    diff_percent = (float(diff_count)/(response['outputSize'][0] *
-                                       response['outputSize'][1]))*100
+    response['diffCount'] = np.sum(diff_mask)
+    percent = float(response['diffCount'])/(response['outputSize'][0] *
+                                            response['outputSize'][1])
+    response['diffPercent'] = percent * 100
 
     if create_diff_file:
         diff_arr[diff_mask] = np.array(RGB_YELLOW)
         diff_image = Image.fromarray(diff_arr, IMAGE_ONE.mode)
+        response['outputImage'] = image_blender(IMAGE_ONE,
+                                                IMAGE_TWO,
+                                                diff_image,
+                                                response['diffCount'])
 
-        # do not blend if images are found to match because blending
-        # can be expensive
-        if diff_count != 0:
-            # overlay the two input images, then overlay the yellow/black
-            # marked
-            # difference image to generate the output image that a human can
-            # see
-            final_image = Image.blend(IMAGE_ONE, IMAGE_TWO, 0.5)
-            final_image = Image.blend(diff_image, final_image, 0.25)
-            buffer = cStringIO.StringIO()
-            final_image.save(buffer, format="PNG")
-            response['outputImage'] = base64.b64encode(buffer.getvalue())
-        else:
-            final_image = Image.blend(IMAGE_ONE, diff_image, 0.25)
-            buffer = cStringIO.StringIO()
-            final_image.save(buffer, format="PNG")
-            response['outputImage'] = base64.b64encode(buffer.getvalue())
-
-    # it is up to whatever consumes this output to determine whether the
-    # calculated diff percentage or count of different
-    # pixels is acceptible or not
-    response['diffCount'] = diff_count
-    response['diffPercent'] = diff_percent
     return response
 
 
@@ -214,3 +176,21 @@ def pixels_are_different(pixel1, pixel2):
             return True
 
     return False
+
+
+def image_blender(image_one, image_two, diff_image, diff_count):
+    if diff_count != 0:
+        # overlay the two input images, then overlay the yellow/black
+        # marked
+        # difference image to generate the output image that a human can
+        # see
+        final_image = Image.blend(image_one, image_two, 0.5)
+        final_image = Image.blend(diff_image, final_image, 0.25)
+        buffer = cStringIO.StringIO()
+        final_image.save(buffer, format="PNG")
+        return base64.b64encode(buffer.getvalue())
+    else:
+        final_image = Image.blend(image_one, diff_image, 0.25)
+        buffer = cStringIO.StringIO()
+        final_image.save(buffer, format="PNG")
+        return base64.b64encode(buffer.getvalue())
