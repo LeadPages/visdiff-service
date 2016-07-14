@@ -5,3 +5,4 @@ temp/
 diff.png
 scratch.py
 .coverage
+.env

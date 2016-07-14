@@ -25,4 +25,7 @@ def create_app(config_name):
     from .image.v2 import image as v2_image_blueprint
     app.register_blueprint(v2_image_blueprint, url_prefix='/image/v2')
 
+    from .index import index as index_blueprint
+    app.register_blueprint(index_blueprint)
+
     return app
