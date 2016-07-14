@@ -19,4 +19,10 @@ def create_app(config_name):
     from .image import image as image_blueprint
     app.register_blueprint(image_blueprint, url_prefix='/image')
 
+    from .image.v1 import image as v1_image_blueprint
+    app.register_blueprint(v1_image_blueprint, url_prefix='/image/v1')
+
+    from .image.v2 import image as v2_image_blueprint
+    app.register_blueprint(v2_image_blueprint, url_prefix='/image/v2')
+
     return app

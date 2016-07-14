@@ -27,7 +27,7 @@ class ApiTests(unittest.TestCase):
             image_two = base64.b64encode(f.read())
 
         start = time.time()
-        r = self.client.post(url_for('image.image_diff_endpoint_v2'),
+        r = self.client.post(url_for('imagev2.image_diff_endpoint'),
                              data=dict(
                                     images=[image_one, image_two]
                                     ))
@@ -65,7 +65,7 @@ class ApiTests(unittest.TestCase):
             image_two = base64.b64encode(f.read())
 
         start = time.time()
-        r = self.client.post(url_for('image.image_diff_endpoint_v2'),
+        r = self.client.post(url_for('imagev2.image_diff_endpoint'),
                              data=dict(
                                     images=[image_one, image_two]
                                     ))
@@ -102,7 +102,7 @@ class ApiTests(unittest.TestCase):
             image_two = base64.b64encode(f.read())
 
         start = time.time()
-        r = self.client.post(url_for('image.image_diff_endpoint_v2'),
+        r = self.client.post(url_for('imagev2.image_diff_endpoint'),
                              data=dict(
                                     images=[image_one, image_two]
                                     ))
@@ -139,7 +139,7 @@ class ApiTests(unittest.TestCase):
             image_two = base64.b64encode(f.read())
 
         start = time.time()
-        r = self.client.post(url_for('image.image_diff_endpoint_v2'),
+        r = self.client.post(url_for('imagev2.image_diff_endpoint'),
                              data=dict(
                                     images=[image_one, image_two]
                                     ))
@@ -176,7 +176,7 @@ class ApiTests(unittest.TestCase):
             image_two = base64.b64encode(f.read())
 
         start = time.time()
-        r = self.client.post(url_for('image.image_diff_endpoint_v2'),
+        r = self.client.post(url_for('imagev2.image_diff_endpoint'),
                              data=dict(
                                     images=[image_one, image_two]
                                     ))
@@ -213,7 +213,7 @@ class ApiTests(unittest.TestCase):
             image_two = base64.b64encode(f.read())
 
         start = time.time()
-        r = self.client.post(url_for('image.image_diff_endpoint_v2'),
+        r = self.client.post(url_for('imagev2.image_diff_endpoint'),
                              data=dict(
                                     images=[image_one, image_two]
                                     ))
@@ -250,7 +250,7 @@ class ApiTests(unittest.TestCase):
             image_two = base64.b64encode(f.read())
 
         start = time.time()
-        r = self.client.post(url_for('image.image_diff_endpoint_v2'),
+        r = self.client.post(url_for('imagev2.image_diff_endpoint'),
                              data=dict(
                                     images=[image_one, image_two]
                                     ))
@@ -285,7 +285,7 @@ class ApiTests(unittest.TestCase):
             image_one = base64.b64encode(f.read())
 
         start = time.time()
-        r = self.client.post(url_for('image.image_diff_endpoint_v2'),
+        r = self.client.post(url_for('imagev2.image_diff_endpoint'),
                              data=dict(
                                     images=[image_one, image_one]
                                     ))

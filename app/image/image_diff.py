@@ -9,6 +9,7 @@ import numpy as np
 RGB_BLACK = (0, 0, 0)
 RGBA_BLACK = (0, 0, 0, 0)
 RGB_YELLOW = (128, 128, 0)
+RGBA_YELLOW = (128, 128, 0, 0)
 
 
 def generate_difference_report(image_one, image_two,
@@ -118,7 +119,12 @@ def generate_difference_report_v2(image_one, image_two,
     response['diffPercent'] = percent * 100
 
     if create_diff_file:
-        diff_arr[diff_mask] = np.array(RGB_YELLOW)
+        diff_image = Image.fromarray(diff_arr, IMAGE_ONE.mode)
+        if diff_image.mode == "RGB":
+            mask_color = np.array(RGB_YELLOW)
+        else:
+            mask_color = np.array(RGBA_YELLOW)
+        diff_arr[diff_mask] = np.array(mask_color)
         diff_image = Image.fromarray(diff_arr, IMAGE_ONE.mode)
         response['outputImage'] = image_blender(IMAGE_ONE,
                                                 IMAGE_TWO,
