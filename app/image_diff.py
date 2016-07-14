@@ -1,4 +1,4 @@
-from PIL import Image, ImageChops
+from PIL import Image
 import io
 import os
 import math
@@ -54,11 +54,11 @@ def generate_difference_report(image_one, image_two,
                                         image2_pixels[i, j]):
                     # write a yellow pixel to the difference mask and
                     # increment difference count
-                    diff_pixels[i, j] = (128, 128, 0)
+                    diff_pixels[i, j] = RGB_YELLOW
                     diff_count += 1
                 else:
                     # write a black pixel to the diffrence mask
-                    diff_pixels[i, j] = (0, 0, 0)
+                    diff_pixels[i, j] = RGB_BLACK
 
     diff_percent = (float(diff_count)/(response['outputSize'][0] *
                                        response['outputSize'][1]))*100
@@ -118,27 +118,28 @@ def generate_difference_report_v2(image_one, image_two,
     diff_count = 0
     diff_percent = 0.0
 
-    diff_image = Image.fromarray(np.zeros_like(IMAGE_ONE, dtype=np.uint8()), IMAGE_ONE.mode)
+    # Subtract array representations of both images (matching pixels are
+    # returned as (0,0,0) or (0,0,0,0))
+    diff_arr = np.subtract(np.asarray(IMAGE_ONE, dtype=np.uint8()),
+                           np.asarray(IMAGE_TWO, dtype=np.uint8()))
 
-
-    diff_arr = np.subtract(np.asarray(IMAGE_ONE, dtype=np.uint8()), np.asarray(IMAGE_TWO, dtype=np.uint8()))
-    diff_count = np.sum(np.any(diff_arr != np.array((0, 0, 0, 0)), axis=2))
-
-    # diff_arr.argwhere
-
-    # for i in range(response['outputSize'][0] - 1):
-    #     for j in range(response['outputSize'][1] - 1):
-    #         if not is_masked(IMAGE_ONE.getpixel((i, j))):
-    #             if pixels_are_different(IMAGE_ONE.getpixel((i, j)),
-    #                                     IMAGE_TWO.getpixel((i, j))):
-    #                 # write a yellow pixel to the difference mask and
-    #                 # increment difference count
-    #                 diff_image.putpixel((i, j), (128, 128, 0))
-
+    # Compare axis 2 (RGB or RGBA values) to black (matching pixels).  If the
+    # pixel is anything but black (meaning no match) the comparison will return
+    # true.  Sum of true values equals the number of pixels that do not match
+    # between the images
+    if IMAGE_ONE.mode == "RGB":
+        match_arr = np.array(RGB_BLACK)
+    else:
+        match_arr = np.array(RGBA_BLACK)
+    diff_mask = np.any(diff_arr != match_arr, axis=2)
+    diff_count = np.sum(diff_mask)
     diff_percent = (float(diff_count)/(response['outputSize'][0] *
                                        response['outputSize'][1]))*100
 
     if create_diff_file:
+        diff_arr[diff_mask] = np.array(RGB_YELLOW)
+        diff_image = Image.fromarray(diff_arr, IMAGE_ONE.mode)
+
         # do not blend if images are found to match because blending
         # can be expensive
         if diff_count != 0:
@@ -207,7 +208,7 @@ def pixels_are_different(pixel1, pixel2):
     pixel2 - tuple(R, G, B) where R/G/B are 0 - 255
     """
     # global DIFF_THRESHOLD
-    DIFF_THRESHOLD = 0
+    DIFF_THRESHOLD = 40
     for component in range(3):
         if math.fabs(pixel1[component] - pixel2[component]) > DIFF_THRESHOLD:
             return True
