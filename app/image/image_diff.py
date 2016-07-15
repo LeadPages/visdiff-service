@@ -1,15 +1,10 @@
-from PIL import Image
+from PIL import Image, ImageColor
 import io
 import os
 import math
 import base64
 import cStringIO
 import numpy as np
-
-RGB_BLACK = (0, 0, 0)
-RGBA_BLACK = (0, 0, 0, 0)
-RGB_YELLOW = (128, 128, 0)
-RGBA_YELLOW = (128, 128, 0, 0)
 
 
 def generate_difference_report(image_one, image_two,
@@ -55,11 +50,13 @@ def generate_difference_report(image_one, image_two,
                                         image2_pixels[i, j]):
                     # write a yellow pixel to the difference mask and
                     # increment difference count
-                    diff_pixels[i, j] = RGB_YELLOW
+                    diff_pixels[i, j] = ImageColor.getcolor('yellow',
+                                                            IMAGE_ONE.mode)
                     diff_count += 1
                 else:
                     # write a black pixel to the diffrence mask
-                    diff_pixels[i, j] = RGB_BLACK
+                    diff_pixels[i, j] = ImageColor.getcolor('black',
+                                                            IMAGE_ONE.mode)
 
     diff_percent = (float(diff_count)/(response['outputSize'][0] *
                                        response['outputSize'][1]))*100
@@ -77,7 +74,8 @@ def generate_difference_report(image_one, image_two,
 
 
 def generate_difference_report_v2(image_one, image_two,
-                                  create_diff_file=False):
+                                  create_diff_file=False,
+                                  diff_mask_color="yellow"):
     response = {}
     response['images'] = []
 
@@ -108,10 +106,7 @@ def generate_difference_report_v2(image_one, image_two,
     # pixel is anything but black (meaning no match) the comparison will return
     # true.  Sum of true values equals the number of pixels that do not match
     # between the images
-    if IMAGE_ONE.mode == "RGB":
-        match_arr = np.array(RGB_BLACK)
-    else:
-        match_arr = np.array(RGBA_BLACK)
+    match_arr = ImageColor.getcolor('black', IMAGE_ONE.mode)
     diff_mask = np.any(diff_arr != match_arr, axis=2)
     response['diffCount'] = np.sum(diff_mask)
     percent = float(response['diffCount'])/(response['outputSize'][0] *
@@ -120,10 +115,7 @@ def generate_difference_report_v2(image_one, image_two,
 
     if create_diff_file:
         diff_image = Image.fromarray(diff_arr, IMAGE_ONE.mode)
-        if diff_image.mode == "RGB":
-            mask_color = np.array(RGB_YELLOW)
-        else:
-            mask_color = np.array(RGBA_YELLOW)
+        mask_color = ImageColor.getcolor(diff_mask_color, IMAGE_ONE.mode)
         diff_arr[diff_mask] = np.array(mask_color)
         diff_image = Image.fromarray(diff_arr, IMAGE_ONE.mode)
         response['outputImage'] = image_blender(IMAGE_ONE,
