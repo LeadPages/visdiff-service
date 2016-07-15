@@ -1,0 +1,8 @@
+*.sqlite
+tmp/
+venv
+.env
+*.pyc
+.venv
+tests/
+.git

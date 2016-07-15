@@ -1,0 +1,31 @@
+version: '2'
+services:
+  web:
+    restart: always
+    build: .
+    ports:
+      - 8000
+    command: /usr/local/bin/gunicorn -w 2 -b :8000 manage:app
+    networks:
+      - front-tier
+      - back-tier
+    environment:
+      CONFIG: 'production'
+
+  lb:
+    image: dockercloud/haproxy
+    ports:
+      - 80:80
+    links:
+      - web
+    networks:
+      - front-tier
+      - back-tier
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+networks:
+  front-tier:
+    driver: bridge
+  back-tier:
+    driver: bridge
