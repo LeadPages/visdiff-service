@@ -1,6 +1,7 @@
 from flask import render_template
 from . import image
-from . import image_diff
+from .v1.lib import generate_difference_report as generate_difference_report
+from .v2.lib import generate_difference_report as generate_difference_report_v2
 import base64
 from .forms import ImageSubmitForm
 from werkzeug.utils import secure_filename
@@ -20,13 +21,13 @@ def image_diff_test_page():
         image_two = base64.b64encode(form.image_two.data.stream.read())
 
         if form.version_radio_button.data == "v1":
-            diff_report = image_diff.generate_difference_report(image_one,
-                                                                image_two,
-                                                                True)
+            diff_report = generate_difference_report(image_one,
+                                                     image_two,
+                                                     True)
         else:
-            diff_report = image_diff.generate_difference_report_v2(image_one,
-                                                                   image_two,
-                                                                   True)
+            diff_report = generate_difference_report_v2(image_one,
+                                                        image_two,
+                                                        True)
         images = [
             dict(name=image_one_name, image=image_one),
             dict(name=image_two_name, image=image_two),
