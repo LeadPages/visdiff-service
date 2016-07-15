@@ -7,7 +7,7 @@ from .forms import ImageSubmitForm
 from werkzeug.utils import secure_filename
 
 
-@image.route("/diff/", methods=('GET', 'POST'))
+@image.route("/diff/", methods=['GET', 'POST'])
 def image_diff_test_page():
     form = ImageSubmitForm()
     if form.validate_on_submit():
@@ -41,6 +41,6 @@ def image_diff_test_page():
     return render_template("diff_comparision.html", form=form), 200
 
 
-@image.route('/contains/', methods=('GET', 'POST'))
+@image.route('/contains/', methods=['GET', 'POST'])
 def image_contains_test_page():
     return render_template("diff_contains.html"), 200
