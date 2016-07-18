@@ -3,7 +3,7 @@ from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import SubmitField, RadioField
 
 # TODO gif support?
-images = tuple('jpg jpe jpeg png svg bmp'.split())
+images = tuple('jpg jpe jpeg png bmp'.split())
 
 
 class ImageSubmitForm(Form):

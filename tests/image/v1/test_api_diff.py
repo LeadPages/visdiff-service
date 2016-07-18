@@ -7,10 +7,10 @@ import time
 from fixtures import test_images
 
 # Limit for how long all api requests should be under
-API_REQUEST_TIMEOUT = 8
+API_REQUEST_TIMEOUT = 30
 
 # Limit for how long really large api requests should be under
-LARGE_API_REQUEST_TIMEOUT = 30
+LARGE_API_REQUEST_TIMEOUT = 120
 
 
 class ApiTests(unittest.TestCase):
@@ -317,3 +317,16 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(data['diffCount'], 0)
 
         self.assertEqual(data['diffPercent'], 0)
+
+    def test_one_image_error(self):
+        with open(test_images.SPOT_THREE, 'rb') as f:
+            image_one = base64.b64encode(f.read())
+
+        r = self.client.post(url_for('imagev1.image_diff_endpoint'),
+                             data=dict(
+                                    images=[image_one]
+                                    ))
+        self.assertEqual(r.status_code, 404)
+
+        data = json.loads(r.data)
+        self.assertEqual(data["message"], "2 images must be specified")

@@ -60,6 +60,8 @@ def generate_difference_report(image_one, image_two,
     if create_diff_file:
         response['outputImage'] = image_blender(IMAGE_ONE, IMAGE_TWO,
                                                 diff_image, diff_count)
+    else:
+        response["outputImage"] = None
 
     # it is up to whatever consumes this output to determine whether the
     # calculated diff percentage or count of different
