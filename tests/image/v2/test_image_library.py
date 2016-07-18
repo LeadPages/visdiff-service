@@ -86,3 +86,10 @@ class GenerateDifferenceReportWithOutputTests(unittest.TestCase):
                     self.launchpage_after_1024_base64,
                     self.launchpage_before_1024_base64)
         self.assertIsNone(res["outputImage"])
+
+    def test_no_diff_count(self):
+        res = generate_difference_report(
+                    self.launchpage_after_1024_base64,
+                    self.launchpage_after_1024_base64,
+                    True)
+        self.assertIsNotNone(res["outputImage"])

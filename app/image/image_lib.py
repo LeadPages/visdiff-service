@@ -1,8 +1,10 @@
-from PIL import Image
+from PIL import Image, ImageFile
 import io
 import os
 import base64
 import cStringIO
+
+SUPPORTED_IMAGES = tuple('jpg jpe jpeg png bmp'.split())
 
 
 def is_file(path):
@@ -12,30 +14,41 @@ def is_file(path):
 
 def load_image(image):
     """Loads the given image."""
-    if not is_file(image):
-        image = io.BytesIO(image.decode('base64'))
-    return Image.open(image)
+    if is_file(image):
+        filename, file_extension = os.path.splitext(image)
+        if file_extension.replace(".", "") in SUPPORTED_IMAGES:
+            return Image.open(image)
+        else:
+            raise ValueError("Image type was not listed in supported images %s"
+                             % (SUPPORTED_IMAGES, ))
+    else:
+        return Image.open(io.BytesIO(image.decode('base64')))
 
 
 def get_output_image_size(image_one, image_two):
-    if image_one.size[0] > image_two.size[0]:
-        output_width = image_one.size[0]
-    else:
-        output_width = image_two.size[0]
+    if (issubclass(type(image_one), ImageFile.ImageFile)
+            and issubclass(type(image_two), ImageFile.ImageFile)):
+        if image_one.size[0] > image_two.size[0]:
+            output_width = image_one.size[0]
+        else:
+            output_width = image_two.size[0]
 
-    if image_one.size[1] > image_two.size[1]:
-        output_height = image_one.size[1]
+        if image_one.size[1] > image_two.size[1]:
+            output_height = image_one.size[1]
+        else:
+            output_height = image_two.size[1]
+        return (output_width, output_height)
     else:
-        output_height = image_two.size[1]
-    return (output_width, output_height)
+        raise ValueError("Both parameters must be of type Image")
 
 
 def image_blender(image_one, image_two, diff_image, diff_count):
+    """
+    overlay the two input images, then overlay the yellow/black marked
+    difference image to generate the output image that a human can see
+    """
     if diff_count != 0:
-        # overlay the two input images, then overlay the yellow/black
-        # marked
-        # difference image to generate the output image that a human can
-        # see
+
         final_image = Image.blend(image_one, image_two, 0.5)
         final_image = Image.blend(diff_image, final_image, 0.25)
         buffer = cStringIO.StringIO()

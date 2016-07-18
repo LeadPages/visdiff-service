@@ -10,7 +10,7 @@ from fixtures import test_images
 API_REQUEST_TIMEOUT = 30
 
 # Limit for how long really large api requests should be under
-LARGE_API_REQUEST_TIMEOUT = 90
+LARGE_API_REQUEST_TIMEOUT = 120
 
 
 class ApiTests(unittest.TestCase):

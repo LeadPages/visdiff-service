@@ -14,9 +14,6 @@ def image_diff_test_page():
         image_one_name = secure_filename(form.image_one.data.filename)
         image_two_name = secure_filename(form.image_two.data.filename)
 
-        # image_one_type = secure_filename(form.image_one.data.type)
-        # image_two_type = secure_filename(form.image_one.data.type)
-
         image_one = base64.b64encode(form.image_one.data.stream.read())
         image_two = base64.b64encode(form.image_two.data.stream.read())
 

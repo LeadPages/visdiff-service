@@ -22,3 +22,13 @@ THANKS_AFTER = join(FIXTURES_FOLDER, 'Tyk_after.png')
 
 SPOT_HARD_ONE = join(FIXTURES_FOLDER, 'spothard1.png')
 SPOT_HARD_TWO = join(FIXTURES_FOLDER, 'spothard2.png')
+
+PK_300_x_200 = join(FIXTURES_FOLDER, 'place_kitten_300_200.jpeg')
+PK_200_x_300 = join(FIXTURES_FOLDER, 'place_kitten_200_300.jpeg')
+
+NOT_IMAGE = join(FIXTURES_FOLDER, 'not_image_type.txt')
+
+PK_1000_x_1000_JPE = join(FIXTURES_FOLDER, 'place_kitten_1000_1000.jpe')
+PK_1000_x_1000_JPG = join(FIXTURES_FOLDER, 'place_kitten_1000_1000.jpg')
+MOUNTAIN_640_x_480_BMP = join(FIXTURES_FOLDER, 'mountain_640_480.bmp')
+KIWI_400_x_400_SVG = join(FIXTURES_FOLDER, 'kiwi_400_400.svg')
