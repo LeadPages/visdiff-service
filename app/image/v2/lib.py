@@ -38,6 +38,7 @@ def generate_difference_report(image_one, image_two,
     # true.  Sum of true values equals the number of pixels that do not match
     # between the images
     match_arr = ImageColor.getcolor('black', IMAGE_ONE.mode)
+
     # Color returns rgba value of (0,0,0,255) which throws off matching
     if IMAGE_ONE.mode == "RGBA":
         match_arr = match_arr[:3] + (0,)
@@ -47,7 +48,6 @@ def generate_difference_report(image_one, image_two,
                                                response["outputSize"])
 
     if create_diff_file:
-        diff_image = Image.fromarray(diff_arr, IMAGE_ONE.mode)
         mask_color = ImageColor.getcolor(diff_mask_color, IMAGE_ONE.mode)
         diff_arr[diff_mask] = np.array(mask_color)
         diff_image = Image.fromarray(diff_arr, IMAGE_ONE.mode)

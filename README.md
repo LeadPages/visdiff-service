@@ -32,7 +32,7 @@ With [docker](https://get.docker.com/) installed run:
 
 `docker build -t "YOUR_IMAGE_NAME" .`
 
-`docker run YOUR_IMAGE_NAME runserver -t 0.0.0.0`
+`docker run -p 5000:5000 YOUR_IMAGE_NAME`
 
 ### Docker Compose ###
 

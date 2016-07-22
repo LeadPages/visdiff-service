@@ -15,4 +15,6 @@ RUN echo "FLASK_CONFIG=$CONFIG" > .env
 # Install Pip requirements
 RUN pip install -r requirements/production.txt
 
-ENTRYPOINT ["python", "./manage.py"]
+ENTRYPOINT ["/usr/local/bin/gunicorn"]
+
+CMD ["-w", "2", "-b",":5000","manage:app"]
