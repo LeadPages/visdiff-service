@@ -6,7 +6,8 @@ from ..image_lib import is_file, load_image, get_output_image_size,\
 
 def generate_difference_report(image_one, image_two,
                                create_diff_file=False,
-                               diff_mask_color="yellow"):
+                               diff_mask_color="yellow",
+                               diff_threshold=0):
     response = {}
     response['images'] = []
 
@@ -30,8 +31,9 @@ def generate_difference_report(image_one, image_two,
 
     # Subtract array representations of both images (matching pixels are
     # returned as (0,0,0) or (0,0,0,0))
-    diff_arr = np.subtract(np.asarray(IMAGE_ONE, dtype=np.uint8()),
-                           np.asarray(IMAGE_TWO, dtype=np.uint8()))
+    diff_arr = np.subtract(np.asarray(IMAGE_ONE, dtype=np.int16),
+                           np.asarray(IMAGE_TWO, dtype=np.int16))
+    diff_arr = np.absolute(diff_arr)
 
     # Compare axis 2 (RGB or RGBA values) to black (matching pixels).  If the
     # pixel is anything but black (meaning no match) the comparison will return
@@ -42,7 +44,13 @@ def generate_difference_report(image_one, image_two,
     # Color returns rgba value of (0,0,0,255) which throws off matching
     if IMAGE_ONE.mode == "RGBA":
         match_arr = match_arr[:3] + (0,)
-    diff_mask = np.any(diff_arr != match_arr, axis=2)
+        if diff_threshold is not 0:
+            match_arr = np.add(match_arr, np.full((1, 4), diff_threshold))
+    else:
+        if diff_threshold is not 0:
+            match_arr = np.add(match_arr, np.full((1, 3), diff_threshold))
+
+    diff_mask = np.any(np.greater(diff_arr, match_arr), axis=2)
     response['diffCount'] = np.sum(diff_mask)
     response['diffPercent'] = get_diff_percent(response['diffCount'],
                                                response["outputSize"])
@@ -50,7 +58,8 @@ def generate_difference_report(image_one, image_two,
     if create_diff_file:
         mask_color = ImageColor.getcolor(diff_mask_color, IMAGE_ONE.mode)
         diff_arr[diff_mask] = np.array(mask_color)
-        diff_image = Image.fromarray(diff_arr, IMAGE_ONE.mode)
+        diff_image = Image.fromarray(diff_arr.astype(np.uint8()),
+                                     IMAGE_ONE.mode)
         response['outputImage'] = image_blender(IMAGE_ONE,
                                                 IMAGE_TWO,
                                                 diff_image,
