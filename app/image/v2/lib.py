@@ -10,6 +10,7 @@ def generate_difference_report(image_one, image_two,
                                diff_threshold=0):
     response = {}
     response['images'] = []
+    response['threshold'] = diff_threshold
 
     if is_file(image_one) and is_file(image_two):
         response['images'].append({'location': image_one})

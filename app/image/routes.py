@@ -17,6 +17,8 @@ def image_diff_test_page():
         image_one = base64.b64encode(form.image_one.data.stream.read())
         image_two = base64.b64encode(form.image_two.data.stream.read())
 
+        threshold = form.diff_threshold.data
+
         if form.version_radio_button.data == "v1":
             diff_report = generate_difference_report(image_one,
                                                      image_two,
@@ -24,7 +26,9 @@ def image_diff_test_page():
         else:
             diff_report = generate_difference_report_v2(image_one,
                                                         image_two,
-                                                        True)
+                                                        True,
+                                                        diff_threshold=
+                                                        threshold)
         images = [
             dict(name=image_one_name, image=image_one),
             dict(name=image_two_name, image=image_two),
