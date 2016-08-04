@@ -29,7 +29,8 @@ class TestPageRouteTests(unittest.TestCase):
                     data={
                         'image_one': one,
                         'image_two': two,
-                        'version_radio_button': "v1"}
+                        'version_radio_button': "v1",
+                        'diff_threshold': "0"}
                 )
                 self.assertEqual(r.status_code, 200)
                 self.assertIn('v1', r.data,
@@ -45,7 +46,8 @@ class TestPageRouteTests(unittest.TestCase):
                     data={
                         'image_one': one,
                         'image_two': two,
-                        'version_radio_button': "v2"}
+                        'version_radio_button': "v2",
+                        'diff_threshold': "0"}
                 )
                 self.assertEqual(r.status_code, 200)
                 self.assertIn('v2', r.data,
@@ -59,7 +61,8 @@ class TestPageRouteTests(unittest.TestCase):
                 url_for('image.image_diff_test_page'),
                 data={
                     'image_two': two,
-                    'version_radio_button': "v1"}
+                    'version_radio_button': "v1",
+                    'diff_threshold': "0"}
             )
             self.assertEqual(r.status_code, 200)
             self.assertIn('Please enter two images to compare', r.data)

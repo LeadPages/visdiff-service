@@ -1,5 +1,5 @@
 import unittest
-from app.image.v2.lib import generate_difference_report
+from app.image.v2.lib import generate_difference_report, get_boolean
 from fixtures import test_images
 import base64
 
@@ -93,3 +93,33 @@ class GenerateDifferenceReportWithOutputTests(unittest.TestCase):
                     self.launchpage_after_1024_base64,
                     True)
         self.assertIsNotNone(res["outputImage"])
+
+
+class GetBooleanTests(unittest.TestCase):
+    def test_true_string_cases(self):
+        self.assertTrue(get_boolean('true'))
+        self.assertTrue(get_boolean('yes'))
+        self.assertTrue(get_boolean('on'))
+        self.assertTrue(get_boolean('y'))
+        self.assertTrue(get_boolean('1'))
+
+    def test_false_string_cases(self):
+        self.assertFalse(get_boolean('false'))
+        self.assertFalse(get_boolean('no'))
+        self.assertFalse(get_boolean('off'))
+        self.assertFalse(get_boolean('n'))
+        self.assertFalse(get_boolean('0'))
+
+    def test_true_bool_cases(self):
+        self.assertTrue(get_boolean(True))
+
+    def test_false_bool_cases(self):
+        self.assertFalse(get_boolean(False))
+
+    def test_null_cases(self):
+        with self.assertRaises(ValueError):
+            get_boolean(None)
+
+    def test_unhandled_cases(self):
+        with self.assertRaises(ValueError):
+            get_boolean('neither')

@@ -24,11 +24,11 @@ def image_diff_test_page():
                                                      image_two,
                                                      True)
         else:
-            diff_report = generate_difference_report_v2(image_one,
-                                                        image_two,
-                                                        True,
-                                                        diff_threshold=
-                                                        threshold)
+            diff_report = \
+                generate_difference_report_v2(image_one,
+                                              image_two,
+                                              True,
+                                              diff_threshold=threshold)
         images = [
             dict(name=image_one_name, image=image_one),
             dict(name=image_two_name, image=image_two),
