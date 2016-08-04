@@ -10,7 +10,7 @@ def generate_difference_report(image_one, image_two,
                                diff_threshold=0):
     response = {}
     response['images'] = []
-    response['threshold'] = diff_threshold
+    response['threshold'] = int(diff_threshold)
 
     if is_file(image_one) and is_file(image_two):
         response['images'].append({'location': image_one})
@@ -69,3 +69,17 @@ def generate_difference_report(image_one, image_two,
         response["outputImage"] = None
 
     return response
+
+
+def get_boolean(value):
+    if type(value) == bool:
+        return value
+
+    if not value:
+        raise ValueError("boolean type must be non-null")
+    value = value.lower()
+    if value in ('false', 'no', 'off', 'n', '0',):
+        return False
+    if value in ('true', 'yes', 'on', 'y', '1',):
+        return True
+    raise ValueError("Invalid literal for boolean(): {}".format(value))
