@@ -1,18 +1,34 @@
-from flask import jsonify, request
-from . import image
-from lib import generate_difference_report, get_boolean
+from lib import generate_difference_report
+
+import falcon
 
 
-@image.route("/api/diff/", methods=['POST'])
-def image_diff_endpoint():
-    images = request.form.getlist('images')
+class Routes(object):
+    def on_post(self, req, resp):
+        if 'images' in req.context['doc']:
+            images = req.context['doc']['images']
+        else:
+            raise falcon.HTTPBadRequest(
+                'Missing images array',
+                'An array of images must be submitted in the request body.')
 
-    threshold = request.form.get('threshold', default=0, type=int)
-    output = get_boolean(request.form.get('returnOutputImage',
-                                          default='false', type=str))
-    if len(images) != 2:
-        return jsonify(message="2 images must be specified"), 404
-    return jsonify(generate_difference_report(images[0],
-                                              images[1],
-                                              create_diff_file=output,
-                                              diff_threshold=threshold)), 200
+        if 'threshold' in req.context['doc']:
+            threshold = req.context['doc']['threshold']
+        else:
+            threshold = 0
+
+        if 'returnOutputImage' in req.context['doc']:
+            output = req.context['doc']['returnOutputImage']
+        else:
+            output = False
+
+        if len(images) != 2:
+            raise falcon.HTTPBadRequest(
+                'Missing images array',
+                'An array of images must contain exactly 2 images.')
+        resp.status = falcon.HTTP_OK
+        req.context['result'] = \
+            generate_difference_report(images[0],
+                                       images[1],
+                                       create_diff_file=output,
+                                       diff_threshold=threshold)

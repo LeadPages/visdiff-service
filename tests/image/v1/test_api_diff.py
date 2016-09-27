@@ -1,10 +1,11 @@
-import unittest
 import base64
 import json
-from app import create_app
-from flask import url_for
 import time
-from fixtures import test_images
+from tests.fixtures import test_images
+import falcon.testing as testing
+from app.image.v1 import routes as v1
+import falcon
+from app.middleware import JSONTranslator
 
 # Limit for how long all api requests should be under
 API_REQUEST_TIMEOUT = 30
@@ -13,15 +14,14 @@ API_REQUEST_TIMEOUT = 30
 LARGE_API_REQUEST_TIMEOUT = 120
 
 
-class ApiTests(unittest.TestCase):
+class ApiTests(testing.TestCase):
     def setUp(self):
-        self.app = create_app('testing')
-        self.app_context = self.app.app_context()
-        self.app_context.push()
-        self.client = self.app.test_client()
-
-    def tearDown(self):
-        self.app_context.pop()
+        super(ApiTests, self).setUp()
+        self.api = falcon.API(middleware=[
+            JSONTranslator()
+        ])
+        route = v1.Routes()
+        self.api.add_route('/images/v1/api/diff', route)
 
     def test_launchpad_images(self):
         with open(test_images.LAUNCHPAGE_AFTER, 'rb') as f:
@@ -30,18 +30,16 @@ class ApiTests(unittest.TestCase):
             image_two = base64.b64encode(f.read())
 
         start = time.time()
-        r = self.client.post(url_for('imagev1.image_diff_endpoint'),
-                             data=dict(
-                                    images=[image_one, image_two]
-                                    ))
+        r = self.simulate_post('/images/v1/api/diff',
+                               body=json.dumps({'images':
+                                               [image_one, image_two]}))
         end = time.time()
         elapsedTime = end - start
         self.assertLess(elapsedTime, API_REQUEST_TIMEOUT,
                         'request took %s, which is longer than %s seconds'
                         % (elapsedTime, API_REQUEST_TIMEOUT))
         self.assertEqual(r.status_code, 200)
-
-        data = json.loads(r.data)
+        data = r.json
 
         self.assertEqual(data['images'][0]['location'], 'base64string')
         self.assertEqual(data['images'][1]['location'], 'base64string')
@@ -68,10 +66,9 @@ class ApiTests(unittest.TestCase):
             image_two = base64.b64encode(f.read())
 
         start = time.time()
-        r = self.client.post(url_for('imagev1.image_diff_endpoint'),
-                             data=dict(
-                                    images=[image_one, image_two]
-                                    ))
+        r = self.simulate_post('/images/v1/api/diff',
+                               body=json.dumps({'images':
+                                               [image_one, image_two]}))
         end = time.time()
         elapsedTime = end - start
         self.assertLess(elapsedTime, API_REQUEST_TIMEOUT,
@@ -79,7 +76,7 @@ class ApiTests(unittest.TestCase):
                         % (elapsedTime, API_REQUEST_TIMEOUT))
         self.assertEqual(r.status_code, 200)
 
-        data = json.loads(r.data)
+        data = r.json
 
         self.assertEqual(data['images'][0]['location'], 'base64string')
         self.assertEqual(data['images'][1]['location'], 'base64string')
@@ -105,10 +102,9 @@ class ApiTests(unittest.TestCase):
             image_two = base64.b64encode(f.read())
 
         start = time.time()
-        r = self.client.post(url_for('imagev1.image_diff_endpoint'),
-                             data=dict(
-                                    images=[image_one, image_two]
-                                    ))
+        r = self.simulate_post('/images/v1/api/diff',
+                               body=json.dumps({'images':
+                                               [image_one, image_two]}))
         end = time.time()
         elapsedTime = end - start
         self.assertLess(elapsedTime, API_REQUEST_TIMEOUT,
@@ -116,7 +112,7 @@ class ApiTests(unittest.TestCase):
                         % (elapsedTime, API_REQUEST_TIMEOUT))
         self.assertEqual(r.status_code, 200)
 
-        data = json.loads(r.data)
+        data = r.json
 
         self.assertEqual(data['images'][0]['location'], 'base64string')
         self.assertEqual(data['images'][1]['location'], 'base64string')
@@ -142,10 +138,9 @@ class ApiTests(unittest.TestCase):
             image_two = base64.b64encode(f.read())
 
         start = time.time()
-        r = self.client.post(url_for('imagev1.image_diff_endpoint'),
-                             data=dict(
-                                    images=[image_one, image_two]
-                                    ))
+        r = self.simulate_post('/images/v1/api/diff',
+                               body=json.dumps({'images':
+                                               [image_one, image_two]}))
         end = time.time()
         elapsedTime = end - start
         self.assertLess(elapsedTime, API_REQUEST_TIMEOUT,
@@ -153,7 +148,7 @@ class ApiTests(unittest.TestCase):
                         % (elapsedTime, API_REQUEST_TIMEOUT))
         self.assertEqual(r.status_code, 200)
 
-        data = json.loads(r.data)
+        data = r.json
 
         self.assertEqual(data['images'][0]['location'], 'base64string')
         self.assertEqual(data['images'][1]['location'], 'base64string')
@@ -179,10 +174,9 @@ class ApiTests(unittest.TestCase):
             image_two = base64.b64encode(f.read())
 
         start = time.time()
-        r = self.client.post(url_for('imagev1.image_diff_endpoint'),
-                             data=dict(
-                                    images=[image_one, image_two]
-                                    ))
+        r = self.simulate_post('/images/v1/api/diff',
+                               body=json.dumps({'images':
+                                               [image_one, image_two]}))
         end = time.time()
         elapsedTime = end - start
         self.assertLess(elapsedTime, LARGE_API_REQUEST_TIMEOUT,
@@ -190,7 +184,7 @@ class ApiTests(unittest.TestCase):
                         % (elapsedTime, LARGE_API_REQUEST_TIMEOUT))
         self.assertEqual(r.status_code, 200)
 
-        data = json.loads(r.data)
+        data = r.json
 
         self.assertEqual(data['images'][0]['location'], 'base64string')
         self.assertEqual(data['images'][1]['location'], 'base64string')
@@ -216,10 +210,9 @@ class ApiTests(unittest.TestCase):
             image_two = base64.b64encode(f.read())
 
         start = time.time()
-        r = self.client.post(url_for('imagev1.image_diff_endpoint'),
-                             data=dict(
-                                    images=[image_one, image_two]
-                                    ))
+        r = self.simulate_post('/images/v1/api/diff',
+                               body=json.dumps({'images':
+                                               [image_one, image_two]}))
         end = time.time()
         elapsedTime = end - start
         self.assertLess(elapsedTime, LARGE_API_REQUEST_TIMEOUT,
@@ -227,7 +220,7 @@ class ApiTests(unittest.TestCase):
                         % (elapsedTime, LARGE_API_REQUEST_TIMEOUT))
         self.assertEqual(r.status_code, 200)
 
-        data = json.loads(r.data)
+        data = r.json
 
         self.assertEqual(data['images'][0]['location'], 'base64string')
         self.assertEqual(data['images'][1]['location'], 'base64string')
@@ -253,10 +246,9 @@ class ApiTests(unittest.TestCase):
             image_two = base64.b64encode(f.read())
 
         start = time.time()
-        r = self.client.post(url_for('imagev1.image_diff_endpoint'),
-                             data=dict(
-                                    images=[image_one, image_two]
-                                    ))
+        r = self.simulate_post('/images/v1/api/diff',
+                               body=json.dumps({'images':
+                                               [image_one, image_two]}))
         end = time.time()
         elapsedTime = end - start
         self.assertLess(elapsedTime, LARGE_API_REQUEST_TIMEOUT,
@@ -264,7 +256,7 @@ class ApiTests(unittest.TestCase):
                         % (elapsedTime, LARGE_API_REQUEST_TIMEOUT))
         self.assertEqual(r.status_code, 200)
 
-        data = json.loads(r.data)
+        data = r.json
 
         self.assertEqual(data['images'][0]['location'], 'base64string')
         self.assertEqual(data['images'][1]['location'], 'base64string')
@@ -288,10 +280,9 @@ class ApiTests(unittest.TestCase):
             image_one = base64.b64encode(f.read())
 
         start = time.time()
-        r = self.client.post(url_for('imagev1.image_diff_endpoint'),
-                             data=dict(
-                                    images=[image_one, image_one]
-                                    ))
+        r = self.simulate_post('/images/v1/api/diff',
+                               body=json.dumps({'images':
+                                               [image_one, image_one]}))
         end = time.time()
         elapsedTime = end - start
         self.assertLess(elapsedTime, API_REQUEST_TIMEOUT,
@@ -299,7 +290,7 @@ class ApiTests(unittest.TestCase):
                         % (elapsedTime, API_REQUEST_TIMEOUT))
         self.assertEqual(r.status_code, 200)
 
-        data = json.loads(r.data)
+        data = r.json
 
         self.assertEqual(data['images'][0]['location'], 'base64string')
         self.assertEqual(data['images'][1]['location'], 'base64string')
@@ -322,11 +313,13 @@ class ApiTests(unittest.TestCase):
         with open(test_images.SPOT_THREE, 'rb') as f:
             image_one = base64.b64encode(f.read())
 
-        r = self.client.post(url_for('imagev1.image_diff_endpoint'),
-                             data=dict(
-                                    images=[image_one]
-                                    ))
-        self.assertEqual(r.status_code, 404)
+        r = self.simulate_post('/images/v1/api/diff',
+                               body=json.dumps({'images':
+                                               [image_one]}))
+        self.assertEqual(r.status_code, 400)
 
-        data = json.loads(r.data)
-        self.assertEqual(data["message"], "2 images must be specified")
+        data = r.json
+        self.assertEqual(data["description"],
+                         "An array of images must contain exactly 2 images.")
+        self.assertEqual(data["title"],
+                         "Missing images array")

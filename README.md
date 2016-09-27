@@ -20,11 +20,7 @@ Swagger docs incoming
 
 To start the server:
 
-`python manage.py runserver`
-
-### Test page ###
-
-Start the server using the command above, and navigate to http://127.0.0.1/image/diff
+`gunicorn app -b :5000`
 
 ### Docker ###
 
@@ -43,3 +39,9 @@ With [Docker-Compose](https://docs.docker.com/compose/install/) installed run:
 To scale we instances run:
 
 `docker-compose scale web=<n>`
+
+### Testing ###
+
+`pytest --cov=app -n 4 tests/ --cov-report html:coverage/cov_html --cov-report xml:coverage/cov.xml --cov-report term`
+
+`pytest --cov=app -n 4 tests/`

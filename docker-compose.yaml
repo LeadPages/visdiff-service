@@ -5,7 +5,7 @@ services:
     build: .
     ports:
       - 5000
-    command: -w 2 -b :5000 manage:app
+    command: -w 2 -b :5000 app
     networks:
       - front-tier
       - back-tier

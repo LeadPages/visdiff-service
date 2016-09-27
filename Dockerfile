@@ -10,11 +10,10 @@ EXPOSE 5000
 
 # Add environment file
 ENV CONFIG 'production'
-RUN echo "FLASK_CONFIG=$CONFIG" > .env
 
 # Install Pip requirements
-RUN pip install -r requirements/production.txt
+RUN pip install -r requirements/common.txt
 
 ENTRYPOINT ["/usr/local/bin/gunicorn"]
 
-CMD ["-w", "2", "-b",":5000","manage:app"]
+CMD ["-w", "2", "-b",":5000","app"]

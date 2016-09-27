@@ -1,31 +1,11 @@
-"""Initialization script for the application."""
-from flask import Flask
-from config import config
-from flask_bootstrap import Bootstrap
+import falcon
+from middleware import JSONTranslator
+from image.v1 import routes as v1
+from image.v2 import routes as v2
 
-bootstrap = Bootstrap()
+api = application = falcon.API(middleware=[
+    JSONTranslator()
+])
 
-
-def create_app(config_name):
-    """app factory function."""
-    app = Flask(__name__)
-
-    app.config.from_object(config[config_name])
-    config[config_name].init_app(app)
-
-    bootstrap.init_app(app)
-
-    # attach routes and custom error pages here
-    from .image import image as image_blueprint
-    app.register_blueprint(image_blueprint, url_prefix='/image')
-
-    from .image.v1 import image as v1_image_blueprint
-    app.register_blueprint(v1_image_blueprint, url_prefix='/image/v1')
-
-    from .image.v2 import image as v2_image_blueprint
-    app.register_blueprint(v2_image_blueprint, url_prefix='/image/v2')
-
-    from .index import index as index_blueprint
-    app.register_blueprint(index_blueprint)
-
-    return app
+api.add_route('/images/v1/api/diff', v1.Routes())
+api.add_route('/images/v2/api/diff', v2.Routes())

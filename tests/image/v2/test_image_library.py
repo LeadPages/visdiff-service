@@ -1,6 +1,6 @@
 import unittest
 from app.image.v2.lib import generate_difference_report, get_boolean
-from fixtures import test_images
+from tests.fixtures import test_images
 import base64
 
 
