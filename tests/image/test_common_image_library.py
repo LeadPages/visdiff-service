@@ -1,6 +1,6 @@
 import unittest
 from app.image.image_lib import load_image, get_output_image_size
-from fixtures import test_images
+from tests.fixtures import test_images
 import os
 import base64
 from PIL import Image

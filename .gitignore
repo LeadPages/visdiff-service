@@ -5,4 +5,8 @@ temp/
 diff.png
 scratch.py
 .coverage
+.coverage.*
 .env
+.cache
+__pycache__\
+coverage/
