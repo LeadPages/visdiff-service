@@ -1,3 +1,5 @@
+-r common.txt
+
 pyflakes==1.2.3
 pytest==3.0.2
 pytest-cov==2.3.1
