@@ -1,5 +1,4 @@
-from lib import generate_difference_report
-
+from app.image.v2.lib import generate_difference_report
 import falcon
 
 

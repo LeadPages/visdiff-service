@@ -1,4 +1,4 @@
-FROM python:2.7
+FROM python:3.5
 
 # Copy files to src folder
 RUN mkdir -p /usr/src/app
