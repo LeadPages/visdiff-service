@@ -27,10 +27,9 @@ class Routes(object):
                 'Missing images array',
                 'An array of images must contain exactly 2 images.')
         resp.status = falcon.HTTP_OK
-
         report = generate_difference_report(images[0],
                                             images[1],
                                             create_diff_file=output,
                                             diff_threshold=threshold)
-        print(type(report['diffCount']))
+
         req.context['result'] = report
