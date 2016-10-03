@@ -324,3 +324,17 @@ class ApiTests(testing.TestCase):
                          "An array of images must contain exactly 2 images.")
         self.assertEqual(data["title"],
                          "Missing images array")
+
+    def test_no_image_error(self):
+        with open(test_images.SPOT_THREE, 'rb') as f:
+            image_one = base64.b64encode(f.read()).decode('utf-8')
+
+        r = self.simulate_post('/images/v1/api/diff',
+                               body=json.dumps({}))
+        self.assertEqual(r.status_code, 400)
+
+        data = r.json
+        self.assertEqual(data["description"],
+                         "An array of images must be submitted in the request body.")
+        self.assertEqual(data["title"],
+                         "Missing images array")
