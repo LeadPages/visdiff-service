@@ -1,7 +1,9 @@
+from __future__ import absolute_import
 import math
 from PIL import Image, ImageColor
 from ..image_lib import is_file, load_image, get_output_image_size,\
                         image_blender, get_diff_percent
+from six.moves import range
 
 
 def generate_difference_report(image_one, image_two,

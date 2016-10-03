@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import unittest
 from app.image.v2.lib import generate_difference_report, get_boolean
 from tests.fixtures import test_images

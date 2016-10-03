@@ -1,7 +1,8 @@
+from __future__ import absolute_import
 import falcon
-from middleware import JSONTranslator
-from image.v1 import routes as v1
-from image.v2 import routes as v2
+from app.middleware import JSONTranslator
+from app.image.v1 import routes as v1
+from app.image.v2 import routes as v2
 
 api = application = falcon.API(middleware=[
     JSONTranslator()

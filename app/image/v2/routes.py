@@ -1,5 +1,5 @@
-from lib import generate_difference_report
-
+from __future__ import absolute_import
+from app.image.v2.lib import generate_difference_report
 import falcon
 
 
@@ -27,8 +27,9 @@ class Routes(object):
                 'Missing images array',
                 'An array of images must contain exactly 2 images.')
         resp.status = falcon.HTTP_OK
-        req.context['result'] = \
-            generate_difference_report(images[0],
-                                       images[1],
-                                       create_diff_file=output,
-                                       diff_threshold=threshold)
+        report = generate_difference_report(images[0],
+                                            images[1],
+                                            create_diff_file=output,
+                                            diff_threshold=threshold)
+
+        req.context['result'] = report

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import unittest
 from app.image.image_lib import load_image, get_output_image_size
 from tests.fixtures import test_images
@@ -8,9 +9,9 @@ from PIL import Image
 
 class LoadImageTests(unittest.TestCase):
     def setUp(self):
-        self.file_error_message = ur"Image type was not listed in supported" +\
-                                  ur" images \('jpg', 'jpe', 'jpeg', 'png'," +\
-                                  ur" 'bmp'\)"
+        self.file_error_message = "Image type was not listed in supported" +\
+                                  " images \('jpg', 'jpe', 'jpeg', 'png'," +\
+                                  " 'bmp'\)"
 
     def test_jpg_load(self):
         img = load_image(test_images.PK_1000_x_1000_JPG)
