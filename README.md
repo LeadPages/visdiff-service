@@ -42,6 +42,6 @@ To scale we instances run:
 
 ### Testing ###
 
-`pytest --cov=app -n 4 tests/ --cov-report html:coverage/cov_html --cov-report xml:coverage/cov.xml --cov-report term`
+`pytest --cov=app -nauto tests/ --cov-report html:coverage/cov_html --cov-report xml:coverage/cov.xml --cov-report term`
 
-`pytest --cov=app -n 4 tests/`
+`pytest --cov=app -nauto tests/`

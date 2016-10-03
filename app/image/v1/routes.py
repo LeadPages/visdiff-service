@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from app.image.v1.lib import generate_difference_report
 import falcon
 

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from os.path import join, dirname
 
 FIXTURES_FOLDER = join(dirname(__file__), "images")

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from PIL import Image, ImageColor
 import numpy as np
 from ..image_lib import is_file, load_image, get_output_image_size,\

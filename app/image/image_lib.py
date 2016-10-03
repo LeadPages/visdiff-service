@@ -1,8 +1,8 @@
+from __future__ import absolute_import
 from PIL import Image, ImageFile
-import io
+from io import BytesIO
 import os
 import base64
-import cStringIO
 
 SUPPORTED_IMAGES = tuple('jpg jpe jpeg png bmp'.split())
 
@@ -22,7 +22,7 @@ def load_image(image):
             raise ValueError("Image type was not listed in supported images %s"
                              % (SUPPORTED_IMAGES, ))
     else:
-        return Image.open(io.BytesIO(image.decode('base64')))
+        return Image.open(BytesIO(base64.b64decode(image)))
 
 
 def get_output_image_size(image_one, image_two):
@@ -48,17 +48,16 @@ def image_blender(image_one, image_two, diff_image, diff_count):
     difference image to generate the output image that a human can see
     """
     if diff_count != 0:
-
         final_image = Image.blend(image_one, image_two, 0.5)
         final_image = Image.blend(diff_image, final_image, 0.25)
-        buffer = cStringIO.StringIO()
+        buffer = BytesIO()
         final_image.save(buffer, format="PNG")
-        return base64.b64encode(buffer.getvalue())
+        return base64.b64encode(buffer.getvalue()).decode('utf-8')
     else:
         final_image = Image.blend(image_one, diff_image, 0.25)
-        buffer = cStringIO.StringIO()
+        buffer = BytesIO()
         final_image.save(buffer, format="PNG")
-        return base64.b64encode(buffer.getvalue())
+        return base64.b64encode(buffer.getvalue()).decode('utf-8')
 
 
 def get_diff_percent(diff_pixel_count, image_size):

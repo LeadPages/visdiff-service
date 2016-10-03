@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import base64
 import json
 import time
@@ -25,9 +26,9 @@ class ApiTests(testing.TestCase):
 
     def test_launchpad_images(self):
         with open(test_images.LAUNCHPAGE_AFTER, 'rb') as f:
-            image_one = base64.b64encode(f.read())
+            image_one = base64.b64encode(f.read()).decode('utf-8')
         with open(test_images.LAUNCHPAGE_BEFORE, 'rb') as f:
-            image_two = base64.b64encode(f.read())
+            image_two = base64.b64encode(f.read()).decode('utf-8')
 
         start = time.time()
         r = self.simulate_post('/images/v1/api/diff',
@@ -61,9 +62,9 @@ class ApiTests(testing.TestCase):
     def test_spot_images(self):
         """Compares the spot images.  Both are 3MB plus"""
         with open(test_images.SPOT_THREE, 'rb') as f:
-            image_one = base64.b64encode(f.read())
+            image_one = base64.b64encode(f.read()).decode('utf-8')
         with open(test_images.SPOT_FOUR, 'rb') as f:
-            image_two = base64.b64encode(f.read())
+            image_two = base64.b64encode(f.read()).decode('utf-8')
 
         start = time.time()
         r = self.simulate_post('/images/v1/api/diff',
@@ -97,9 +98,9 @@ class ApiTests(testing.TestCase):
 
     def test_more_spot_images(self):
         with open(test_images.SPOT_ONE, 'rb') as f:
-            image_one = base64.b64encode(f.read())
+            image_one = base64.b64encode(f.read()).decode('utf-8')
         with open(test_images.SPOT_TWO, 'rb') as f:
-            image_two = base64.b64encode(f.read())
+            image_two = base64.b64encode(f.read()).decode('utf-8')
 
         start = time.time()
         r = self.simulate_post('/images/v1/api/diff',
@@ -133,9 +134,9 @@ class ApiTests(testing.TestCase):
 
     def test_hard_spot_images(self):
         with open(test_images.SPOT_HARD_ONE, 'rb') as f:
-            image_one = base64.b64encode(f.read())
+            image_one = base64.b64encode(f.read()).decode('utf-8')
         with open(test_images.SPOT_HARD_TWO, 'rb') as f:
-            image_two = base64.b64encode(f.read())
+            image_two = base64.b64encode(f.read()).decode('utf-8')
 
         start = time.time()
         r = self.simulate_post('/images/v1/api/diff',
@@ -169,9 +170,9 @@ class ApiTests(testing.TestCase):
 
     def test_leadbox_images(self):
         with open(test_images.LEADBOX_BEFORE, 'rb') as f:
-            image_one = base64.b64encode(f.read())
+            image_one = base64.b64encode(f.read()).decode('utf-8')
         with open(test_images.LEADBOX_AFTER, 'rb') as f:
-            image_two = base64.b64encode(f.read())
+            image_two = base64.b64encode(f.read()).decode('utf-8')
 
         start = time.time()
         r = self.simulate_post('/images/v1/api/diff',
@@ -205,9 +206,9 @@ class ApiTests(testing.TestCase):
 
     def test_thank_you_images(self):
         with open(test_images.THANKS_BEFORE, 'rb') as f:
-            image_one = base64.b64encode(f.read())
+            image_one = base64.b64encode(f.read()).decode('utf-8')
         with open(test_images.THANKS_AFTER, 'rb') as f:
-            image_two = base64.b64encode(f.read())
+            image_two = base64.b64encode(f.read()).decode('utf-8')
 
         start = time.time()
         r = self.simulate_post('/images/v1/api/diff',
@@ -241,9 +242,9 @@ class ApiTests(testing.TestCase):
 
     def test_share_page_images(self):
         with open(test_images.SHAREPAGE_BEFORE, 'rb') as f:
-            image_one = base64.b64encode(f.read())
+            image_one = base64.b64encode(f.read()).decode('utf-8')
         with open(test_images.SHAREPAGE_AFTER, 'rb') as f:
-            image_two = base64.b64encode(f.read())
+            image_two = base64.b64encode(f.read()).decode('utf-8')
 
         start = time.time()
         r = self.simulate_post('/images/v1/api/diff',
@@ -277,7 +278,7 @@ class ApiTests(testing.TestCase):
 
     def test_same_images(self):
         with open(test_images.SPOT_THREE, 'rb') as f:
-            image_one = base64.b64encode(f.read())
+            image_one = base64.b64encode(f.read()).decode('utf-8')
 
         start = time.time()
         r = self.simulate_post('/images/v1/api/diff',
@@ -311,7 +312,7 @@ class ApiTests(testing.TestCase):
 
     def test_one_image_error(self):
         with open(test_images.SPOT_THREE, 'rb') as f:
-            image_one = base64.b64encode(f.read())
+            image_one = base64.b64encode(f.read()).decode('utf-8')
 
         r = self.simulate_post('/images/v1/api/diff',
                                body=json.dumps({'images':

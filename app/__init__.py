@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import falcon
 from app.middleware import JSONTranslator
 from app.image.v1 import routes as v1
